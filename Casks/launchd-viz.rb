@@ -1,6 +1,6 @@
 cask "launchd-viz" do
-  version "1.0.0"
-  sha256 "969c09a387a43caf18b374ef4e75a9f0afc07bbd06eff196e6e78ccce33eebc0"
+  version "1.1.0"
+  sha256 "c65c218584375f29e18b22162cf4c3568e54feac5fb1fd00548c02daa1930ae3"
 
   url "https://github.com/nelsondude/launchd-viz/releases/download/v#{version}/Launchd.Viz-#{version}-universal.dmg"
   name "Launchd Viz"
