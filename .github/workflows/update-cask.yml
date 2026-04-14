@@ -15,18 +15,29 @@ jobs:
 
       - name: Update Cask formula
         run: |
+          CASK="${{ github.event.client_payload.cask }}"
           VERSION="${{ github.event.client_payload.version }}"
           VERSION="${VERSION#v}"
           SHA256="${{ github.event.client_payload.sha256 }}"
 
-          sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/launchd-viz.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${SHA256}\"/" Casks/launchd-viz.rb
+          CASK_FILE="Casks/${CASK}.rb"
+          if [ ! -f "$CASK_FILE" ]; then
+            echo "Error: $CASK_FILE not found"
+            exit 1
+          fi
+
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" "$CASK_FILE"
+          sed -i "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "$CASK_FILE"
 
       - name: Commit and push
         run: |
+          CASK="${{ github.event.client_payload.cask }}"
+          VERSION="${{ github.event.client_payload.version }}"
+          VERSION="${VERSION#v}"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Casks/launchd-viz.rb
+          git add Casks/
           git diff --cached --quiet && echo "No changes" && exit 0
-          git commit -m "Update launchd-viz to ${VERSION}"
+          git commit -m "Update ${CASK} to ${VERSION}"
           git push
